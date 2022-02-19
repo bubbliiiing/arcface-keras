@@ -1,4 +1,4 @@
-## Arcface：人脸识别模型在Pytorch当中的实现
+## Arcface：人脸识别模型在Keras当中的实现
 ---
 
 ## 目录
@@ -13,9 +13,9 @@
 ## 性能情况
 | 训练数据集 | 权值文件名称 | 测试数据集 | 输入图片大小 | accuracy | Validation rate |
 | :-----: | :-----: | :------: | :------: | :------: | :------: |
-| CASIA-WebFace | [arcface_mobilenet.pth](https://github.com/bubbliiiing/arcface-pytorch/releases/download/v1.0/arcface_mobilenet.pth) | LFW | 112x112 | 99.11% |  0.95033+-0.02152 @ FAR=0.00133 |
-| CASIA-WebFace | [arcface_mobilefacenet.pth](https://github.com/bubbliiiing/arcface-pytorch/releases/download/v1.0/arcface_mobilefacenet.pth) | LFW | 112x112 | 98.78% | 0.91100+-0.01745 @ FAR=0.00100 |
-| CASIA-WebFace | [arcface_iresnet50.pth](https://github.com/bubbliiiing/arcface-pytorch/releases/download/v1.0/arcface_iresnet50.pth) | LFW | 112x112 | 98.93% | 0.93100+-0.01422 @ FAR=0.00133 |
+| CASIA-WebFace | [arcface_mobilenet.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_mobilenet.h5) | LFW | 112x112 | 99.11% |  0.95033+-0.02152 @ FAR=0.00133 |
+| CASIA-WebFace | [arcface_mobilefacenet.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_mobilefacenet.h5) | LFW | 112x112 | 98.78% | 0.91100+-0.01745 @ FAR=0.00100 |
+| CASIA-WebFace | [arcface_iresnet50.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_iresnet50.h5) | LFW | 112x112 | 98.93% | 0.93100+-0.01422 @ FAR=0.00133 |
 
 （arcface_mobilenet的准确度相比其它较高是因为使用了backbone的预训练权重，正在努力调参中。）
 
@@ -51,24 +51,22 @@ _defaults = {
     #   训练好后logs文件夹下存在多个权值文件，选择验证集损失较低的即可。
     #   验证集损失较低不代表准确度较高，仅代表该权值在验证集上泛化性能较好。
     #--------------------------------------------------------------------------#
-    "model_path"        : "model_data/arcface_mobilefacenet.pth",
-    #--------------------------------------------------------------------------#
+    "model_path"        : "model_data/arcface_mobilefacenet.h5",
+    #-------------------------------------------#
     #   输入图片的大小。
-    #--------------------------------------------------------------------------#
+    #-------------------------------------------#
     "input_shape"       : [112, 112, 3],
-    #--------------------------------------------------------------------------#
+    #-------------------------------------------#
     #   所使用到的主干特征提取网络，与训练的相同
-    #--------------------------------------------------------------------------#
-    "backbone"          : "arcface_mobilefacenet",
-    #--------------------------------------#
+    #   mobilefacenet
+    #   mobilenetv1
+    #   iresnet50
+    #-------------------------------------------#
+    "backbone"          : "mobilefacenet",
+    #-------------------------------------------#
     #   是否进行不失真的resize
-    #--------------------------------------#
+    #-------------------------------------------#
     "letterbox_image"   : True,
-    #--------------------------------------#
-    #   是否使用Cuda
-    #   没有GPU可以设置成False
-    #--------------------------------------#
-    "cuda"              : True,
 }
 ```
 3. 运行predict.py，输入  
