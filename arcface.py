@@ -23,11 +23,7 @@ class Arcface(object):
         #   所使用到的主干特征提取网络，与训练的相同
         #   mobilefacenet
         #   mobilenetv1
-        #   iresnet18
-        #   iresnet34
         #   iresnet50
-        #   iresnet100
-        #   iresnet200
         #-------------------------------------------#
         "backbone"          : "mobilefacenet",
         #-------------------------------------------#

@@ -96,7 +96,7 @@ def calculate_val_far(threshold, dist, actual_issame):
 
 def test(test_loader, model, png_save_path, log_interval, batch_size):
     labels, distances = [], []
-    pbar = tqdm(enumerate(test_loader))
+    pbar = tqdm(enumerate(test_loader.generate()))
     for batch_idx, (data_a, data_p, label) in pbar:
         out_a, out_p = model.predict(data_a), model.predict(data_p)
         dists = np.linalg.norm(out_a - out_p, axis=1)
@@ -112,8 +112,8 @@ def test(test_loader, model, png_save_path, log_interval, batch_size):
         #--------------------------------------#
         if batch_idx % log_interval == 0:
             pbar.set_description('Test Epoch: [{}/{} ({:.0f}%)]'.format(
-                batch_idx * batch_size, len(test_loader.dataset),
-                100. * batch_idx / len(test_loader)))
+                batch_idx * batch_size, len(test_loader.validation_images),
+                100. * batch_idx / len(test_loader.validation_images)))
 
     #--------------------------------------#
     #   转换成numpy

@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint, TensorBoard
+from keras.layers import Conv2D, Dense, DepthwiseConv2D, PReLU
 from keras.optimizers import SGD, Adam
 from keras.regularizers import l2
 
@@ -10,8 +11,7 @@ from nets.arcface import arcface
 from nets.arcface_training import ArcFaceLoss, get_lr_scheduler
 from utils.callbacks import LFW_callback, LossHistory
 from utils.dataloader import FacenetDataset, LFWDataset
-from utils.utils import get_num_classes, get_acc
-
+from utils.utils import get_acc, get_num_classes
 
 if __name__ == "__main__":
     #--------------------------------------------------------#
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     #
     #   除了mobilenetv1外，其它的backbone均可从0开始训练。
     #--------------------------------------------------------#
-    backbone        = "iresnet50"
+    backbone        = "mobilefacenet"
     #----------------------------------------------------------------------------------------------------------------------------#
     #   如果训练过程中存在中断训练的操作，可以将model_path设置成logs文件夹下的权值文件，将已经训练了一部分的权值再次载入。
     #   同时修改下方的训练的参数，来保证模型epoch的连续性。
@@ -123,12 +123,14 @@ if __name__ == "__main__":
     num_val = int(len(lines)*val_split)
     num_train = len(lines) - num_val
 
-    for i in range(len(model.layers)):
-        if hasattr(model.layers[i], "kernel"):
-            model.layers[i].add_loss(l2(weight_decay)(model.layers[i].kernel))
-        if hasattr(model.layers[i], "alpha"):
-            model.layers[i].add_loss(l2(weight_decay)(model.layers[i].alpha))
-            
+    for layer in model.layers:
+        if isinstance(layer, DepthwiseConv2D):
+            layer.add_loss(l2(weight_decay)(layer.depthwise_kernel))
+        elif isinstance(layer, Conv2D) or isinstance(layer, Dense):
+            layer.add_loss(l2(weight_decay)(layer.kernel))
+        elif isinstance(layer, PReLU):
+            layer.add_loss(l2(weight_decay)(layer.alpha))
+
     if True:
         #-------------------------------------------------------------------#
         #   判断当前batch_size与64的差别，自适应调整学习率
@@ -143,7 +145,7 @@ if __name__ == "__main__":
         }[optimizer_type]
         m = 0.5
         s = 32 if backbone == "mobilefacenet" else 64
-        model.compile(optimizer = optimizer, loss={'ArcMargin': ArcFaceLoss(s = s, m = m)}, metrics=[get_acc()])
+        model.compile(optimizer = optimizer, loss={'ArcMargin': ArcFaceLoss(s = s, m = m)}, metrics={'ArcMargin': get_acc()})
     
         #---------------------------------------#
         #   获得学习率下降的公式

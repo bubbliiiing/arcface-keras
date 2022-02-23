@@ -13,18 +13,17 @@
 ## 性能情况
 | 训练数据集 | 权值文件名称 | 测试数据集 | 输入图片大小 | accuracy | Validation rate |
 | :-----: | :-----: | :------: | :------: | :------: | :------: |
-| CASIA-WebFace | [arcface_mobilenet.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_mobilenet.h5) | LFW | 112x112 | 99.11% |  0.95033+-0.02152 @ FAR=0.00133 |
-| CASIA-WebFace | [arcface_mobilefacenet.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_mobilefacenet.h5) | LFW | 112x112 | 98.78% | 0.91100+-0.01745 @ FAR=0.00100 |
-| CASIA-WebFace | [arcface_iresnet50.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_iresnet50.h5) | LFW | 112x112 | 98.93% | 0.93100+-0.01422 @ FAR=0.00133 |
-
-（arcface_mobilenet的准确度相比其它较高是因为使用了backbone的预训练权重，正在努力调参中。）
+| CASIA-WebFace | [arcface_mobilenet.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_mobilenet.h5) | LFW | 112x112 | 99.00% |  0.95200+-0.02237 @ FAR=0.00100 |
+| CASIA-WebFace | [arcface_mobilefacenet.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_mobilefacenet.h5) | LFW | 112x112 | 99.02% | 0.96500+-0.01344 @ FAR=0.00133 |
+| CASIA-WebFace | [arcface_iresnet50.h5](https://github.com/bubbliiiing/arcface-keras/releases/download/v1.0/arcface_iresnet50.h5) | LFW | 112x112 | 98.98% | 0.92967+-0.01935 @ FAR=0.00133 |
 
 ## 所需环境
-pytorch==1.2.0
+tensorflow==1.13.2
+keras=2.1.5
 
 ## 文件下载
 已经训练好的权值可以在百度网盘下载。    
-链接: https://pan.baidu.com/s/1ElJlfmMwOGX699MsgLY8qA 提取码: z3rq   
+链接：https://pan.baidu.com/s/1P3-T6_PoXGTMYa_VuiwXmw 提取码: 114e
 
 训练用的CASIA-WebFaces数据集以及评估用的LFW数据集可以在百度网盘下载。    
 链接: https://pan.baidu.com/s/1qMxFR8H_ih0xmY-rKgRejw 提取码: bcrq   

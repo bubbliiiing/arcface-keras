@@ -1,5 +1,5 @@
 from nets.arcface import arcface
-from utils.LFWdataset import LFWDataset
+from utils.dataloader import LFWDataset
 from utils.utils_metrics import test
 
 if __name__ == "__main__":
@@ -7,11 +7,7 @@ if __name__ == "__main__":
     #   主干特征提取网络的选择
     #   mobilefacenet
     #   mobilenetv1
-    #   iresnet18
-    #   iresnet34
     #   iresnet50
-    #   iresnet100
-    #   iresnet200
     #--------------------------------------#
     backbone        = "mobilefacenet"
     #--------------------------------------#
@@ -38,7 +34,7 @@ if __name__ == "__main__":
     #--------------------------------------#
     png_save_path   = "model_data/roc_test.png"
 
-    test_loader     = LFWDataset(dir=lfw_dir_path,pairs_path=lfw_pairs_path, batch_size=batch_size,image_size=input_shape)
+    test_loader     = LFWDataset(dir=lfw_dir_path,pairs_path=lfw_pairs_path, batch_size=batch_size, input_shape=input_shape)
 
     model           = arcface(input_shape, None, backbone=backbone, mode="predict")
     model.load_weights(model_path, by_name=True)
