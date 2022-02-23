@@ -65,7 +65,7 @@ class Arcface(object):
     #---------------------------------------------------#
     def detect_image(self, image_1, image_2):
         image_1 = resize_image(image_1, [self.input_shape[1], self.input_shape[0]], self.letterbox_image)
-        image_2 = resize_image(image_1, [self.input_shape[1], self.input_shape[0]], self.letterbox_image)
+        image_2 = resize_image(image_2, [self.input_shape[1], self.input_shape[0]], self.letterbox_image)
         
         photo_1 = np.expand_dims(preprocess_input(np.array(image_1, np.float32)), 0)
         photo_2 = np.expand_dims(preprocess_input(np.array(image_2, np.float32)), 0)
