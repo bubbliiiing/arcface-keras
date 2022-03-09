@@ -24,6 +24,9 @@ class Arcface(object):
         #   mobilefacenet
         #   mobilenetv1
         #   iresnet50
+        #   mobilenetv2
+        #   mobilenetv3_small
+        #   mobilenetv3_large
         #-------------------------------------------#
         "backbone"          : "mobilefacenet",
         #-------------------------------------------#

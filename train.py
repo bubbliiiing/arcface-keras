@@ -26,6 +26,9 @@ if __name__ == "__main__":
     #   主干特征提取网络的选择
     #   mobilefacenet
     #   mobilenetv1
+    #   mobilenetv2
+    #   mobilenetv3_small
+    #   mobilenetv3_large
     #   iresnet50
     #
     #   除了mobilenetv1外，其它的backbone均可从0开始训练。

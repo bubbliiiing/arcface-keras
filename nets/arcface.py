@@ -1,15 +1,15 @@
-import keras
 import keras.backend as K
 import tensorflow as tf
-from keras import backend as K
 from keras import initializers
 from keras.layers import Input, Lambda, Layer
 from keras.models import Model
 from keras.regularizers import l2
 
+from nets.iresnet import iResNet50
 from nets.mobilefacenet import mobilefacenet
 from nets.mobilenet import MobilenetV1
-from nets.iresnet import iResNet50
+from nets.mobilenetv2 import MobilenetV2
+from nets.mobilenetv3 import MobileNetV3_Large, MobilenetV3_small
 
 
 class ArcMarginProduct(Layer) :
@@ -42,6 +42,15 @@ def arcface(input_shape, num_classes=None, backbone="mobilefacenet", mode="train
     elif backbone=="mobilenetv1":
         embedding_size  = 512
         x = MobilenetV1(inputs, embedding_size, dropout_keep_prob=0.5)
+    elif backbone=="mobilenetv2":
+        embedding_size  = 512
+        x = MobilenetV2(inputs, embedding_size, dropout_keep_prob=0.5)
+    elif backbone=="mobilenetv3_small":
+        embedding_size  = 512
+        x = MobilenetV3_small(inputs, embedding_size, dropout_keep_prob=0.5)
+    elif backbone=="mobilenetv3_large":
+        embedding_size  = 512
+        x = MobileNetV3_Large(inputs, embedding_size, dropout_keep_prob=0.5)
     elif backbone=="iresnet50":
         embedding_size  = 512
         x = iResNet50(inputs, embedding_size, dropout_keep_prob=0.5)
