@@ -45,17 +45,14 @@ def arcface(input_shape, num_classes=None, backbone="mobilefacenet", mode="train
     elif backbone=="mobilenetv2":
         embedding_size  = 512
         x = MobilenetV2(inputs, embedding_size, dropout_keep_prob=0.5)
-    elif backbone=="mobilenetv3_small":
-        embedding_size  = 512
-        x = MobilenetV3_small(inputs, embedding_size, dropout_keep_prob=0.5)
-    elif backbone=="mobilenetv3_large":
+    elif backbone=="mobilenetv3":
         embedding_size  = 512
         x = MobileNetV3_Large(inputs, embedding_size, dropout_keep_prob=0.5)
     elif backbone=="iresnet50":
         embedding_size  = 512
         x = iResNet50(inputs, embedding_size, dropout_keep_prob=0.5)
     else:
-        raise ValueError('Unsupported backbone - `{}`, Use mobilefacenet, mobilenetv1, iresnet50.'.format(mode))
+        raise ValueError('Unsupported backbone - `{}`, Use mobilefacenet, mobilenetv1, mobilenetv2, mobilenetv3, iresnet50.'.format(mode))
 
     if mode == "train":
         predict = Lambda(lambda  x: K.l2_normalize(x, axis=1), name="l2_normalize")(x)

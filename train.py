@@ -27,8 +27,7 @@ if __name__ == "__main__":
     #   mobilefacenet
     #   mobilenetv1
     #   mobilenetv2
-    #   mobilenetv3_small
-    #   mobilenetv3_large
+    #   mobilenetv3
     #   iresnet50
     #
     #   除了mobilenetv1外，其它的backbone均可从0开始训练。

@@ -7,6 +7,8 @@ if __name__ == "__main__":
     #   主干特征提取网络的选择
     #   mobilefacenet
     #   mobilenetv1
+    #   mobilenetv2
+    #   mobilenetv3
     #   iresnet50
     #--------------------------------------#
     backbone        = "mobilefacenet"
