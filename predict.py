@@ -17,7 +17,7 @@ if __name__ == "__main__":
     #   fps_test_image  fps测试图片
     #-------------------------------------------------------------------------#
     test_interval   = 100
-    fps_test_image  = 'img/street.jpg'
+    fps_test_image  = 'img/1_001.jpg'
     
     if mode == "predict":
         while True:
