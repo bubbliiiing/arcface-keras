@@ -19,7 +19,7 @@
 | 模型 | 路径 |
 | :----- | :----- |
 facenet | https://github.com/bubbliiiing/facenet-keras
-arcface | https://github.com/bubbliiiing/arcface-keras 
+arcface | https://github.com/bubbliiiing/arcface-keras
 
 ## 性能情况
 | 训练数据集 | 权值文件名称 | 测试数据集 | 输入图片大小 | accuracy | Validation rate |
