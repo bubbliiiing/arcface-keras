@@ -181,7 +181,6 @@ if __name__ == "__main__":
         checkpoint      = ModelCheckpoint(os.path.join(save_dir, "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5"), 
                                 monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = save_period)
         lr_scheduler    = LearningRateScheduler(lr_scheduler_func, verbose = 1)
-        callbacks       = [logging, loss_history, checkpoint, lr_scheduler]
         #---------------------------------#
         #   LFW估计
         #---------------------------------#
