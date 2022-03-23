@@ -92,3 +92,28 @@ class Arcface(object):
         plt.text(-12, -12, 'Distance:%.3f' % l1, ha='center', va= 'bottom',fontsize=11)
         plt.show()
         return l1
+
+    def get_FPS(self, image, test_interval):
+        #---------------------------------------------------#
+        #   对图片进行不失真的resize
+        #---------------------------------------------------#
+        image_data  = resize_image(image, [self.input_shape[1], self.input_shape[0]], self.letterbox_image)
+        #---------------------------------------------------------#
+        #   归一化+添加上batch_size维度
+        #---------------------------------------------------------#
+        image_data  = np.expand_dims(preprocess_input(np.array(image_data, np.float32)), 0)
+        
+        #---------------------------------------------------#
+        #   图片传入网络进行预测
+        #---------------------------------------------------#
+        preds       = self.model.predict(image_data)[0]
+        import time
+        t1 = time.time()
+        for _ in range(test_interval):
+            #---------------------------------------------------#
+            #   图片传入网络进行预测
+            #---------------------------------------------------#
+            preds       = self.model.predict(image_data)[0]
+        t2 = time.time()
+        tact_time = (t2 - t1) / test_interval
+        return tact_time
