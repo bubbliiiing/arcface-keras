@@ -87,6 +87,10 @@ if __name__ == "__main__":
     #------------------------------------------------------------------#
     save_period         = 1
     #------------------------------------------------------------------#
+    #   save_dir        权值与日志文件保存的文件夹
+    #------------------------------------------------------------------#
+    save_dir            = 'logs'
+    #------------------------------------------------------------------#
     #   用于设置是否使用多线程读取数据
     #   开启后会加快数据读取速度，但是会占用更多内存
     #   内存较小的电脑可以设置为2或者1 
@@ -171,12 +175,13 @@ if __name__ == "__main__":
         #   early_stopping  用于设定早停，val_loss多次不下降自动结束训练，表示模型基本收敛
         #-------------------------------------------------------------------------------#
         time_str        = datetime.datetime.strftime(datetime.datetime.now(),'%Y_%m_%d_%H_%M_%S')
-        log_dir         = os.path.join('logs', "loss_" + str(time_str))
+        log_dir         = os.path.join(save_dir, "loss_" + str(time_str))
         logging         = TensorBoard(log_dir)
         loss_history    = LossHistory(log_dir)
-        checkpoint      = ModelCheckpoint('logs/ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
+        checkpoint      = ModelCheckpoint(os.path.join(save_dir, "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5"), 
                                 monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = save_period)
         lr_scheduler    = LearningRateScheduler(lr_scheduler_func, verbose = 1)
+        callbacks       = [logging, loss_history, checkpoint, lr_scheduler]
         #---------------------------------#
         #   LFW估计
         #---------------------------------#
