@@ -15,7 +15,7 @@ class ArcFaceLoss() :
         self.th         = math.cos(math.pi - m)
         self.mm         = math.sin(math.pi - m) * m
 
-    def __call__(self, y_true, y_pred):
+    def __call__(self, y_true, y_pred, sample_weight=None):
         labels = tf.cast(y_true, tf.float32)
         cosine = tf.cast(y_pred, tf.float32)
         #----------------------------------------------------#
