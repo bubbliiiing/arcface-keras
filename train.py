@@ -6,14 +6,22 @@ from keras.callbacks import LearningRateScheduler, ModelCheckpoint, TensorBoard
 from keras.layers import Conv2D, Dense, DepthwiseConv2D, PReLU
 from keras.optimizers import SGD, Adam
 from keras.regularizers import l2
+from keras.utils.multi_gpu_utils import multi_gpu_model
 
 from nets.arcface import arcface
 from nets.arcface_training import ArcFaceLoss, get_lr_scheduler
-from utils.callbacks import LFW_callback, LossHistory
+from utils.callbacks import (ExponentDecayScheduler, LFW_callback, LossHistory,
+                             ParallelModelCheckpoint)
 from utils.dataloader import FacenetDataset, LFWDataset
 from utils.utils import get_acc, get_num_classes
 
 if __name__ == "__main__":
+    #---------------------------------------------------------------------#
+    #   train_gpu   训练用到的GPU
+    #               默认为第一张卡、双卡为[0, 1]、三卡为[0, 1, 2]
+    #               在使用多GPU时，每个卡上的batch为总batch除以卡的数量。
+    #---------------------------------------------------------------------#
+    train_gpu       = [0,]
     #--------------------------------------------------------#
     #   指向根目录下的cls_train.txt，读取人脸路径与标签
     #--------------------------------------------------------#
@@ -119,17 +127,29 @@ if __name__ == "__main__":
     lfw_dir_path    = "lfw"
     lfw_pairs_path  = "model_data/lfw_pair.txt"
 
+    #------------------------------------------------------#
+    #   设置用到的显卡
+    #------------------------------------------------------#
+    os.environ["CUDA_VISIBLE_DEVICES"]  = ','.join(str(x) for x in train_gpu)
+    ngpus_per_node                      = len(train_gpu)
+    print('Number of devices: {}'.format(ngpus_per_node))
+
     num_classes = get_num_classes(annotation_path)
     #-------------------------------------------#
     #   建立模型
     #-------------------------------------------#
-    model = arcface(input_shape, num_classes, backbone=backbone, mode="train")
+    model_body = arcface(input_shape, num_classes, backbone=backbone, mode="train")
     if model_path != '':
         #------------------------------------------------------#
         #   载入预训练权重
         #------------------------------------------------------#
         print('Load weights {}.'.format(model_path))
-        model.load_weights(model_path, by_name=True, skip_mismatch=True)
+        model_body.load_weights(model_path, by_name=True, skip_mismatch=True)
+        
+    if ngpus_per_node > 1:
+        model   = multi_gpu_model(model_body, gpus=ngpus_per_node)
+    else:
+        model   = model_body
     #-------------------------------------------------------#
     #   0.01用于验证，0.99用于训练
     #-------------------------------------------------------#
@@ -193,8 +213,12 @@ if __name__ == "__main__":
         log_dir         = os.path.join(save_dir, "loss_" + str(time_str))
         logging         = TensorBoard(log_dir)
         loss_history    = LossHistory(log_dir)
-        checkpoint      = ModelCheckpoint(os.path.join(save_dir, "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5"), 
-                                monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = save_period)
+        if ngpus_per_node > 1:
+            checkpoint      = ParallelModelCheckpoint(model_body, os.path.join(save_dir, "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5"), 
+                                    monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = save_period)
+        else:
+            checkpoint      = ModelCheckpoint(os.path.join(save_dir, "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5"), 
+                                    monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = save_period)
         lr_scheduler    = LearningRateScheduler(lr_scheduler_func, verbose = 1)
         #---------------------------------#
         #   LFW估计
