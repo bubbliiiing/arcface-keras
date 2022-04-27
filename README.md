@@ -20,6 +20,8 @@
 | :----- | :----- |
 facenet | https://github.com/bubbliiiing/facenet-keras
 arcface | https://github.com/bubbliiiing/arcface-keras
+retinaface | https://github.com/bubbliiiing/retinaface-keras
+facenet + retinaface | https://github.com/bubbliiiing/facenet-retinaface-keras
 
 ## 性能情况
 | 训练数据集 | 权值文件名称 | 测试数据集 | 输入图片大小 | accuracy | Validation rate |
