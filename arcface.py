@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from nets.arcface import arcface
-from utils.utils import preprocess_input, resize_image
+from utils.utils import preprocess_input, resize_image, show_config
 
 
 class Arcface(object):
@@ -49,6 +49,8 @@ class Arcface(object):
         for name, value in kwargs.items():
             setattr(self, name, value)
         self.generate()
+        
+        show_config(**self._defaults)
         
     def generate(self):
         #---------------------------------------------------#
